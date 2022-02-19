@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,9 @@ namespace Business.Concrete
     public class ArticleManager : IArticleService
     {
         private IArticleDal _articleDal;
-        private ICategoryService _categoryService;
         public ArticleManager(IArticleDal articleDal, ICategoryService categoryService)
         {
             _articleDal = articleDal;
-            _categoryService = categoryService;
         }
         public IResult Delete(Article article)
         {
@@ -28,6 +27,11 @@ namespace Business.Concrete
         public IDataResult<List<Article>> GetAll()
         {
             return new SuccessDataResult<List<Article>>(_articleDal.GetAll().ToList());
+        }
+
+        public IDataResult<Tuple<ArticlePg>> GetAll(int page, int pageSize)
+        {
+            return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAll(page,pageSize));
         }
 
         public IDataResult<List<Article>> GetByCategory(int categoryId)
@@ -51,5 +55,8 @@ namespace Business.Concrete
             _articleDal.Update(article);
             return new SuccessResult();
         }
+        
+
+     
     }
 }

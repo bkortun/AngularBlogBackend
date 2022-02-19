@@ -14,7 +14,7 @@ namespace WebAPI.Controllers
             _articleService= articleService;
         }
         [HttpGet]
-        public IActionResult GetAllArticles()
+        public IActionResult GetArticles()
         {
             var result = _articleService.GetAll();
             if (result.Success)
@@ -23,8 +23,18 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+        [HttpGet("{page}/{pageSize}")]
+        public IActionResult GetArticles(int page,int pageSize)
+        {
+            var result = _articleService.GetAll(page, pageSize);
+            if (result.Success)
+            {
+                return Ok(result.Data.Item1);
+            }
+            return BadRequest(result.Message);
+        }
         [HttpGet("{id}")]
-        public IActionResult GetArticleById(int id)
+        public IActionResult GetArticle(int id)
         {
             var result = _articleService.GetById(id);
             if (result.Success)
