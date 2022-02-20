@@ -13,5 +13,9 @@ namespace DataAccess.Abstract
     {
         Tuple<ArticlePg> ArticlePagination(IQueryable<Article> query,int page, int pageSize);
         Tuple<ArticlePg> GetAll(int page, int pageSize);
+        Tuple<ArticlePg> GetAllByCategory(int id,int page, int pageSize);
+        Tuple<ArticlePg> GetAllBySerarch(string searchText,int page, int pageSize);
+        Tuple<ArticlePg> GetArticleArchiveList(int month,int year, int page, int pageSize);
+        IQueryable GetArticlesArchive();
     }
 }

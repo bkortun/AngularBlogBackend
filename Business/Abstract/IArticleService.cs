@@ -18,6 +18,13 @@ namespace Business.Abstract
         IResult Delete(Article article);
         IResult Update(Article article);
         IDataResult<List<Article>> GetByCategory(int categoryId);
+        IDataResult<Tuple<ArticlePg>> GetByCategory(int categoryId, int page, int pageSize);
+        IDataResult<Tuple<ArticlePg>> GetBySearch(string searchText, int page, int pageSize);
+        IDataResult<List<Article>> GetByMostView();
+        IDataResult<IQueryable> GetArticlesArchive();
+        IDataResult<Tuple<ArticlePg>> GetArticleArchiveList(int month, int year, int page, int pageSize);
+
+
         //IDataResult<List<Article>> GetArticlesByMostView();
         //IDataResult<List<Article>> GetArchive();
         //IDataResult<List<Article>> GetArchiveList();

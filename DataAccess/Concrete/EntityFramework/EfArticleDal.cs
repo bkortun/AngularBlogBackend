@@ -51,5 +51,52 @@ namespace DataAccess.Concrete.EntityFramework
             }
            
         }
+
+        public Tuple<ArticlePg> GetAllByCategory(int id, int page, int pageSize)
+        {
+            using (var context=new UdemyAngularBlogDBContext())
+            {
+                IQueryable<Article> query;
+                query=context.article.Include(x => x.Category).Include(y => y.Comments).Where(a=>a.category_id == id).OrderByDescending(z => z.publish_date);
+                return ArticlePagination(query,page,pageSize);
+            }
+        }
+
+        public Tuple<ArticlePg> GetAllBySerarch(string searchText, int page, int pageSize)
+        {
+            using (var context = new UdemyAngularBlogDBContext())
+            {
+                IQueryable<Article> query;
+                query = context.article.Include(x => x.Category).Include(y => y.Comments).Where(a => a.title.Contains(searchText)).OrderByDescending(z => z.publish_date);
+                return ArticlePagination(query, page, pageSize);
+            }
+        }
+
+        public Tuple<ArticlePg> GetArticleArchiveList(int month, int year, int page, int pageSize)
+        {
+            using (var context=new UdemyAngularBlogDBContext())
+            {
+                IQueryable<Article> query;
+                query = context.article.Include(x => x.Category).Include(y => y.Comments).Where(a => a.publish_date.Month==month&&a.publish_date.Year==year).OrderByDescending(z => z.publish_date);
+                return ArticlePagination(query, page, pageSize);
+            }
+        }
+
+        public IQueryable GetArticlesArchive()
+        {
+            using (var context= new UdemyAngularBlogDBContext())
+            {
+                 var query = context.article.GroupBy(x => new {  x.publish_date.Month, x.publish_date.Year }).Select(x => new
+                {
+                     month = x.Key.Month,
+                     year = x.Key.Year,
+                    count = x.Count(),
+                    monthName = new DateTime(x.Key.Year, x.Key.Month, 1).ToString("MMMM")
+                });
+                context.Dispose();
+                return query;
+                
+            }
+        }
     }
 }

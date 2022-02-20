@@ -43,5 +43,60 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+        [HttpGet]
+        [Route("GetArticleWithCategory/{id}/{page}/{pageSize}")]
+        public IActionResult GetArticleWithCategory(int id,int page,int pageSize)
+        {
+            var result=_articleService.GetByCategory(id,page,pageSize);
+            if (result.Success)
+            {
+                return Ok(result.Data.Item1);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet]
+        [Route("SearchArticles/{searchText}/{page}/{pageSize}")]
+        public IActionResult SearchArticles(string searchText,int page,int pageSize)
+        {
+            var result=_articleService.GetBySearch(searchText,page,pageSize);
+            if (result.Success)
+            {
+                return Ok(result.Data.Item1);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet]
+        [Route("GetArticlesByMostView")]
+        public IActionResult GetArticlesByMostView()
+        {
+            var result = _articleService.GetByMostView();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet]
+        [Route("GetArticlesArchive")]
+        public IActionResult GetArticlesArchive()
+        {
+            var result = _articleService.GetArticlesArchive();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet]
+        [Route("GetArticleArchiveList/{year}/{month}/{page}/{pageSize}")]
+        public IActionResult GetArticleArchiveList(int month, int year, int page, int pageSize)
+        {
+            var result = _articleService.GetArticleArchiveList(month, year, page, pageSize);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
     }
 }

@@ -34,14 +34,38 @@ namespace Business.Concrete
             return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAll(page,pageSize));
         }
 
+        public IDataResult<Tuple<ArticlePg>> GetArticleArchiveList(int month, int year, int page, int pageSize)
+        {
+            return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetArticleArchiveList(month,year,page,pageSize));
+        }
+
+        public IDataResult<IQueryable> GetArticlesArchive()
+        {
+            return new SuccessDataResult<IQueryable>(_articleDal.GetArticlesArchive());
+        }
+
         public IDataResult<List<Article>> GetByCategory(int categoryId)
         {
             return new SuccessDataResult<List<Article>>(_articleDal.GetAll(a => a.category_id == categoryId).ToList());
+        }
+        public IDataResult<Tuple<ArticlePg>> GetByCategory(int categoryId,int page,int pageSize)
+        {
+            return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAllByCategory(categoryId,page,pageSize));
         }
 
         public IDataResult<Article> GetById(int articleId)
         {
             return new SuccessDataResult<Article>(_articleDal.Get(a => a.id == articleId));
+        }
+
+        public IDataResult<List<Article>> GetByMostView()
+        {
+            return new SuccessDataResult<List<Article>>(_articleDal.GetAll().OrderByDescending(a=>a.viewCount).Take(5).ToList());
+        }
+
+        public IDataResult<Tuple<ArticlePg>> GetBySearch(string searchText, int page, int pageSize)
+        {
+            return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAllBySerarch(searchText,page,pageSize));
         }
 
         public IResult Insert(Article article)
