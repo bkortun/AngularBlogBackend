@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,15 +23,15 @@ namespace DataAccess.Concrete.EntityFramework
                 int totalCount = query.Count();
                 var articles = query.Skip(pageSize * (page - 1)).Take(5).ToList().Select(x => new ArticleDetailDto
                 {
-                    id = x.id,
-                    title = x.title,
-                    content_summary = x.content_summary,
-                    content_main = x.content_main,
-                    publish_date = x.publish_date,
-                    picture = x.picture,
-                    viewCount = totalCount,
-                    commentCount = x.Comments.Count(),
-                    category=new Category { id=x.Category.id,name=x.Category.name}
+                    Id = x.Id,
+                    Title = x.Title,
+                    ContentSummary = x.ContentSummary,
+                    ContentMain = x.ContentMain,
+                    PublishDate = x.PublishDate,
+                    Picture = x.Picture,
+                    ViewCount = x.ViewCount,
+                    CommentCount = x.Comments.Count(),
+                    category=new Category { Id=x.Category.Id,Name=x.Category.Name}
                 });
                 var result = new ArticlePg
                 {
@@ -41,12 +42,33 @@ namespace DataAccess.Concrete.EntityFramework
             }
         }
 
+        public ArticleDetailDto GetDetails(int id)
+        {
+            using (var context = new UdemyAngularBlogDBContext())
+            {
+                var article = context.Articles.Include(x => x.Category).Include(y => y.Comments).FirstOrDefault(z => z.Id == id);
+                ArticleDetailDto articleResponse = new ArticleDetailDto()
+                {
+                    Id = article.Id,
+                    Title = article.Title,
+                    ContentSummary = article.ContentSummary,
+                    ContentMain = article.ContentMain,
+                    PublishDate = article.PublishDate,
+                    Picture = article.Picture,
+                    ViewCount = article.ViewCount,
+                    CommentCount = article.Comments.Count(),
+                    category = new Category { Id = article.Category.Id, Name = article.Category.Name }
+                };
+                return articleResponse;
+            }
+        }
+
         public Tuple<ArticlePg> GetAll(int page, int pageSize)
         {
             using (var context = new UdemyAngularBlogDBContext())
             {
                 IQueryable<Article> query;
-                query = context.article.Include(x => x.Category).Include(y => y.Comments).OrderByDescending(z => z.publish_date);
+                query = context.Articles.Include(x => x.Category).Include(y => y.Comments).OrderByDescending(z => z.PublishDate);
                 return ArticlePagination(query, page, pageSize);
             }
            
@@ -57,7 +79,7 @@ namespace DataAccess.Concrete.EntityFramework
             using (var context=new UdemyAngularBlogDBContext())
             {
                 IQueryable<Article> query;
-                query=context.article.Include(x => x.Category).Include(y => y.Comments).Where(a=>a.category_id == id).OrderByDescending(z => z.publish_date);
+                query=context.Articles.Include(x => x.Category).Include(y => y.Comments).Where(a=>a.CategoryId == id).OrderByDescending(z => z.PublishDate);
                 return ArticlePagination(query,page,pageSize);
             }
         }
@@ -67,7 +89,7 @@ namespace DataAccess.Concrete.EntityFramework
             using (var context = new UdemyAngularBlogDBContext())
             {
                 IQueryable<Article> query;
-                query = context.article.Include(x => x.Category).Include(y => y.Comments).Where(a => a.title.Contains(searchText)).OrderByDescending(z => z.publish_date);
+                query = context.Articles.Include(x => x.Category).Include(y => y.Comments).Where(a => a.Title.Contains(searchText)).OrderByDescending(z => z.PublishDate);
                 return ArticlePagination(query, page, pageSize);
             }
         }
@@ -77,25 +99,38 @@ namespace DataAccess.Concrete.EntityFramework
             using (var context=new UdemyAngularBlogDBContext())
             {
                 IQueryable<Article> query;
-                query = context.article.Include(x => x.Category).Include(y => y.Comments).Where(a => a.publish_date.Month==month&&a.publish_date.Year==year).OrderByDescending(z => z.publish_date);
+                query = context.Articles.Include(x => x.Category).Include(y => y.Comments).Where(a => a.PublishDate.Month==month&&a.PublishDate.Year==year).OrderByDescending(z=>z.PublishDate);
                 return ArticlePagination(query, page, pageSize);
             }
         }
 
-        public IQueryable GetArticlesArchive()
+        public  IQueryable<Archive>  GetArticlesArchive()
         {
             using (var context= new UdemyAngularBlogDBContext())
             {
-                 var query = context.article.GroupBy(x => new {  x.publish_date.Month, x.publish_date.Year }).Select(x => new
+                IQueryable<Archive> query;
+                query = context.Articles.GroupBy(x=> new { x.PublishDate.Month, x.PublishDate.Year }).Select(x => new Archive
                 {
-                     month = x.Key.Month,
-                     year = x.Key.Year,
-                    count = x.Count(),
-                    monthName = new DateTime(x.Key.Year, x.Key.Month, 1).ToString("MMMM")
+                     Month = x.Key.Month,
+                     Year = x.Key.Year,
+                    Count = x.Count(),
+                    MonthName = new DateTime(x.Key.Year, x.Key.Month, 1).ToString("MMMM")
                 });
-                context.Dispose();
+           
                 return query;
                 
+            }
+        }
+
+        public int ArticleCountUp(int id)
+        {
+            using (var context= new UdemyAngularBlogDBContext())
+            {
+                var article = context.Articles.Find(id);
+                article.ViewCount = article.ViewCount + 1;
+                context.SaveChanges();
+                return article.ViewCount;
+
             }
         }
     }

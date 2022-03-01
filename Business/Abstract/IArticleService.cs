@@ -14,6 +14,8 @@ namespace Business.Abstract
         IDataResult<List<Article>> GetAll();
         IDataResult<Tuple<ArticlePg>> GetAll(int page, int pageSize);
         IDataResult<Article> GetById(int articleId);
+
+        IDataResult<ArticleDetailDto> GetByArticleDetails(int articleId);
         IResult Insert(Article article);
         IResult Delete(Article article);
         IResult Update(Article article);
@@ -23,6 +25,8 @@ namespace Business.Abstract
         IDataResult<List<Article>> GetByMostView();
         IDataResult<IQueryable> GetArticlesArchive();
         IDataResult<Tuple<ArticlePg>> GetArticleArchiveList(int month, int year, int page, int pageSize);
+
+        IDataResult<int> ArticleCountUp(int id);
 
 
         //IDataResult<List<Article>> GetArticlesByMostView();

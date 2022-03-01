@@ -30,7 +30,7 @@ namespace Business.Concrete
 
         public IDataResult<Comment> GetById(int commentId)
         {
-            return new SuccessDataResult<Comment>(_commentDal.Get(c=>c.id==commentId));  
+            return new SuccessDataResult<Comment>(_commentDal.Get(c=>c.Id==commentId));  
         }
 
         public IResult Insert(Comment comment)

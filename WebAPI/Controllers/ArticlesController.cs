@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetArticle(int id)
         {
-            var result = _articleService.GetById(id);
+            var result = _articleService.GetByArticleDetails(id);
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -92,6 +92,17 @@ namespace WebAPI.Controllers
         public IActionResult GetArticleArchiveList(int month, int year, int page, int pageSize)
         {
             var result = _articleService.GetArticleArchiveList(month, year, page, pageSize);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet]
+        [Route("ArticleViewCountUp/{id}")]
+        public IActionResult ArticleViewCountUp(int id)
+        {
+            var result=_articleService.ArticleCountUp(id);
             if (result.Success)
             {
                 return Ok(result.Data);

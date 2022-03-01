@@ -10,16 +10,16 @@ namespace Entities.Concrete
 {
     public class Article:IEntity
     {
-        public int id { get; set; }
-        public string title { get; set; }
-        public string content_summary { get; set; }
-        public string content_main { get; set; }
-        public DateTime publish_date { get; set; }
-        public string picture { get; set; }
-        public int category_id { get; set; }
-        public int viewCount { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string ContentSummary { get; set; }
+        public string ContentMain { get; set; }
+        public DateTime PublishDate { get; set; }
+        public string Picture { get; set; }
+        public int CategoryId { get; set; }
+        public int ViewCount { get; set; }
 
-        [ForeignKey("category_id")]
+        [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
     }

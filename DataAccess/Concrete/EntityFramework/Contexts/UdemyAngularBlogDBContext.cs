@@ -15,8 +15,8 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
             optionsBuilder.UseSqlServer("Data Source=DESKTOP-GDESUP9\\SQLEXPRESS;Initial Catalog=UdemyAngularBlogDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
 
-        public DbSet<Article> article { get; set; }
-        public DbSet<Category> category { get; set; }
-        public DbSet<Comment> comment { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

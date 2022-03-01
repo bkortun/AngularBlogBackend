@@ -10,13 +10,13 @@ namespace Entities.Concrete
 {
     public class Comment:IEntity
     {
-        public int id { get; set; }
-        public int article_id { get; set; }
-        public string name { get; set; }
-        public string content_main { get; set; }
-        public DateTime publish_date { get; set; }
+        public int Id { get; set; }
+        public int ArticleId { get; set; }
+        public string Name { get; set; }
+        public string ContentMain { get; set; }
+        public DateTime PublishDate { get; set; }
 
-        [ForeignKey("article_id")]
+        [ForeignKey("ArticleId")]
         public virtual Article Article { get; set; }
     }
 }

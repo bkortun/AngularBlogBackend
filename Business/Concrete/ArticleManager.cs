@@ -18,6 +18,12 @@ namespace Business.Concrete
         {
             _articleDal = articleDal;
         }
+
+        public IDataResult<int> ArticleCountUp(int id)
+        {
+            return new SuccessDataResult<int>(_articleDal.ArticleCountUp(id));
+        }
+
         public IResult Delete(Article article)
         {
             _articleDal.Delete(article);
@@ -44,9 +50,14 @@ namespace Business.Concrete
             return new SuccessDataResult<IQueryable>(_articleDal.GetArticlesArchive());
         }
 
+        public IDataResult<ArticleDetailDto> GetByArticleDetails(int articleId)
+        {
+            return new SuccessDataResult<ArticleDetailDto>(_articleDal.GetDetails(articleId));
+        }
+
         public IDataResult<List<Article>> GetByCategory(int categoryId)
         {
-            return new SuccessDataResult<List<Article>>(_articleDal.GetAll(a => a.category_id == categoryId).ToList());
+            return new SuccessDataResult<List<Article>>(_articleDal.GetAll(a => a.CategoryId == categoryId).ToList());
         }
         public IDataResult<Tuple<ArticlePg>> GetByCategory(int categoryId,int page,int pageSize)
         {
@@ -55,12 +66,12 @@ namespace Business.Concrete
 
         public IDataResult<Article> GetById(int articleId)
         {
-            return new SuccessDataResult<Article>(_articleDal.Get(a => a.id == articleId));
+            return new SuccessDataResult<Article>(_articleDal.Get(a => a.Id == articleId));
         }
 
         public IDataResult<List<Article>> GetByMostView()
         {
-            return new SuccessDataResult<List<Article>>(_articleDal.GetAll().OrderByDescending(a=>a.viewCount).Take(5).ToList());
+            return new SuccessDataResult<List<Article>>(_articleDal.GetAll().OrderByDescending(a=>a.ViewCount).Take(5).ToList());
         }
 
         public IDataResult<Tuple<ArticlePg>> GetBySearch(string searchText, int page, int pageSize)
