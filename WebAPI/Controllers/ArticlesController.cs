@@ -1,6 +1,9 @@
 ﻿using Business.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -108,6 +111,26 @@ namespace WebAPI.Controllers
                 return Ok(result.Data);
             }
             return BadRequest(result.Message);
+        }
+
+        [HttpPost]
+        [Route("SaveArticlePicture")]
+        public async Task<IActionResult> SaveArticlePicture(IFormFile picture)
+        {
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(picture.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/articlePictures", fileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await picture.CopyToAsync(stream);
+            }
+
+            var result = new
+            {
+                path = "https://" + Request.Host + "/articlePictures/" + fileName
+
+            };
+            return Ok(result);
         }
     }
 }

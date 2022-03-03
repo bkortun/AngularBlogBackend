@@ -28,6 +28,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Comment>>(_commentDal.GetAll().ToList());
         }
 
+        public IDataResult<List<Comment>> GetAllById(int id)
+        {
+            return new SuccessDataResult<List<Comment>>(_commentDal.GetAll(x=>x.Article.Id==id).ToList());
+        }
+
         public IDataResult<Comment> GetById(int commentId)
         {
             return new SuccessDataResult<Comment>(_commentDal.Get(c=>c.Id==commentId));  

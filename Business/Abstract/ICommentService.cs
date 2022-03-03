@@ -11,6 +11,7 @@ namespace Business.Abstract
     public interface ICommentService
     {
         IDataResult<List<Comment>> GetAll();
+        IDataResult<List<Comment>> GetAllById(int id);
         IDataResult<Comment> GetById(int commentId);
         IResult Insert(Comment comment);
         IResult Delete(Comment comment);
