@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidaton;
+using Core.Aspects.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -79,6 +81,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAllBySerarch(searchText,page,pageSize));
         }
 
+        [ValidationAspect(typeof(ArticleValidator), Priority = 1)]
         public IResult Insert(Article article)
         {
             _articleDal.Insert(article);
