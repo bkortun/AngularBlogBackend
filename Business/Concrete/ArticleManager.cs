@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect.Autofac;
 using Business.ValidationRules.FluentValidaton;
 using Core.Aspects.Validation;
 using Core.Utilities.Results;
@@ -31,12 +32,12 @@ namespace Business.Concrete
             _articleDal.Delete(article);
             return new SuccessResult();
         }
-
+        [SecuredOperation("admin")]
         public IDataResult<List<Article>> GetAll()
         {
             return new SuccessDataResult<List<Article>>(_articleDal.GetAll().ToList());
         }
-
+        
         public IDataResult<Tuple<ArticlePg>> GetAll(int page, int pageSize)
         {
             return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAll(page,pageSize));

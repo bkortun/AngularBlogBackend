@@ -43,7 +43,7 @@ namespace Core.Utilities.Security.Jwt
         {
             var jwt = new JwtSecurityToken
             (
-                 issuer:tokenOptions.Issuer,
+                issuer:tokenOptions.Issuer,
                 audience: tokenOptions.Audience,
                 expires: _accessTokenExpiration,
                 notBefore: DateTime.Now,
