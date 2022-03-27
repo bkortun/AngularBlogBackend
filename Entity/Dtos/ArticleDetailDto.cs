@@ -20,6 +20,6 @@ namespace Entities.Dtos
         public int ViewCount { get; set; }
         public int CommentCount { get; set; }
 
-        public Category category { get; set; }
+        public Category Category { get; set; }
     }
 }

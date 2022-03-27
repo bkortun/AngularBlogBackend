@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,10 +27,20 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+        [HttpGet("GetArticlesAdmin")]
+        public IActionResult GetArticlesAdmin()
+        {
+            var result = _articleService.GetAllAdmin();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
         [HttpGet("{page}/{pageSize}")]
         public IActionResult GetArticles(int page,int pageSize)
         {
-            var result = _articleService.GetAll(page, pageSize);
+            var result = _articleService.GetAllWithPagination(page, pageSize);
             if (result.Success)
             {
                 return Ok(result.Data.Item1);
@@ -50,7 +61,7 @@ namespace WebAPI.Controllers
         [Route("GetArticleWithCategory/{id}/{page}/{pageSize}")]
         public IActionResult GetArticleWithCategory(int id,int page,int pageSize)
         {
-            var result=_articleService.GetByCategory(id,page,pageSize);
+            var result=_articleService.GetByCategoryWithPagination(id,page,pageSize);
             if (result.Success)
             {
                 return Ok(result.Data.Item1);
@@ -132,5 +143,24 @@ namespace WebAPI.Controllers
             };
             return Ok(result);
         }
+
+        [HttpPost]
+        public IActionResult Insert(Article article)
+        {
+            if (article.Category != null)
+            {
+                article.CategoryId = article.Category.Id;
+            }
+            article.Category = null;
+            article.ViewCount = 0;
+            article.PublishDate = DateTime.Now;
+            var result= _articleService.Insert(article);
+            if (result.Success)
+            {
+                return Ok();
+            }
+            return BadRequest(result.Message);
+        }
+
     }
 }

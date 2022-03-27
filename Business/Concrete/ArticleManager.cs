@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
+    
     public class ArticleManager : IArticleService
     {
         private IArticleDal _articleDal;
@@ -32,13 +33,19 @@ namespace Business.Concrete
             _articleDal.Delete(article);
             return new SuccessResult();
         }
-        [SecuredOperation("admin")]
+       //[SecuredOperation("admin")]
         public IDataResult<List<Article>> GetAll()
         {
             return new SuccessDataResult<List<Article>>(_articleDal.GetAll().ToList());
         }
-        
-        public IDataResult<Tuple<ArticlePg>> GetAll(int page, int pageSize)
+
+        public IDataResult<List<ArticleDetailDto>> GetAllAdmin()
+        {
+            return new SuccessDataResult<List<ArticleDetailDto>>(_articleDal.GetAllAdmin().ToList());
+        }
+
+        //[SecuredOperation("admin")]
+        public IDataResult<Tuple<ArticlePg>> GetAllWithPagination(int page, int pageSize)
         {
             return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAll(page,pageSize));
         }
@@ -62,7 +69,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Article>>(_articleDal.GetAll(a => a.CategoryId == categoryId).ToList());
         }
-        public IDataResult<Tuple<ArticlePg>> GetByCategory(int categoryId,int page,int pageSize)
+        public IDataResult<Tuple<ArticlePg>> GetByCategoryWithPagination(int categoryId,int page,int pageSize)
         {
             return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAllByCategory(categoryId,page,pageSize));
         }
@@ -82,7 +89,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Tuple<ArticlePg>>(_articleDal.GetAllBySerarch(searchText,page,pageSize));
         }
 
-        [ValidationAspect(typeof(ArticleValidator), Priority = 1)]
+        
         public IResult Insert(Article article)
         {
             _articleDal.Insert(article);

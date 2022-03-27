@@ -12,7 +12,8 @@ namespace Business.Abstract
     public interface IArticleService
     {
         IDataResult<List<Article>> GetAll();
-        IDataResult<Tuple<ArticlePg>> GetAll(int page, int pageSize);
+        IDataResult<List<ArticleDetailDto>> GetAllAdmin();
+        IDataResult<Tuple<ArticlePg>> GetAllWithPagination(int page, int pageSize);
         IDataResult<Article> GetById(int articleId);
 
         IDataResult<ArticleDetailDto> GetByArticleDetails(int articleId);
@@ -20,7 +21,7 @@ namespace Business.Abstract
         IResult Delete(Article article);
         IResult Update(Article article);
         IDataResult<List<Article>> GetByCategory(int categoryId);
-        IDataResult<Tuple<ArticlePg>> GetByCategory(int categoryId, int page, int pageSize);
+        IDataResult<Tuple<ArticlePg>> GetByCategoryWithPagination(int categoryId, int page, int pageSize);
         IDataResult<Tuple<ArticlePg>> GetBySearch(string searchText, int page, int pageSize);
         IDataResult<List<Article>> GetByMostView();
         IDataResult<IQueryable> GetArticlesArchive();

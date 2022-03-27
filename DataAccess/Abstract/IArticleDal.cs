@@ -20,5 +20,7 @@ namespace DataAccess.Abstract
         IQueryable<Archive> GetArticlesArchive();
         ArticleDetailDto GetDetails(int id);
         int ArticleCountUp(int id);
+
+        List<ArticleDetailDto> GetAllAdmin();
     }
 }

@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.EntityFramework
                     Picture = x.Picture,
                     ViewCount = x.ViewCount,
                     CommentCount = x.Comments.Count(),
-                    category=new Category { Id=x.Category.Id,Name=x.Category.Name}
+                    Category=new Category { Id=x.Category.Id,Name=x.Category.Name}
                 });
                 var result = new ArticlePg
                 {
@@ -57,7 +57,7 @@ namespace DataAccess.Concrete.EntityFramework
                     Picture = article.Picture,
                     ViewCount = article.ViewCount,
                     CommentCount = article.Comments.Count(),
-                    category = new Category { Id = article.Category.Id, Name = article.Category.Name }
+                    Category = new Category { Id = article.Category.Id, Name = article.Category.Name }
                 };
                 return articleResponse;
             }
@@ -131,6 +131,29 @@ namespace DataAccess.Concrete.EntityFramework
                 context.SaveChanges();
                 return article.ViewCount;
 
+            }
+        }
+
+        public List<ArticleDetailDto> GetAllAdmin()
+        {
+            using (var context=new UdemyAngularBlogDBContext())
+            {
+                var result = from a in context.Articles
+                             join c in context.Categories
+                             on a.CategoryId equals c.Id
+                             select new ArticleDetailDto
+                             {
+                                 Id = a.Id,
+                                 Title = a.Title,
+                                 ContentSummary = a.ContentSummary,
+                                 ContentMain = a.ContentMain,
+                                 PublishDate = a.PublishDate,
+                                 CategoryId = a.CategoryId,
+                                 ViewCount = a.ViewCount,
+                                 CommentCount = a.Comments.Count(),
+                                 Category = new Category { Id=c.Id,Name=c.Name}
+                             };
+                return result.ToList() ;
             }
         }
     }
