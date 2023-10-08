@@ -12,7 +12,6 @@ namespace Entities.Concrete
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description {get; set;}
 
         //[ForeignKey("id")]
         public virtual ICollection<Article> Articles { get; set; }
